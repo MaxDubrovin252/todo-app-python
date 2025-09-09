@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Path, HTTPException
 from typing import Annotated
-from .schemas import TodoCreate
+from .schemas import TodoCreate, Todo
 from . import crud
 from core.models import db_helper
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from .dependencies import todo_by_id
 
 router = APIRouter(prefix='/todo', tags=['todo'])
 
@@ -18,9 +18,8 @@ async def create_todo(todo:TodoCreate, session:AsyncSession = Depends(db_helper.
     
     
 @router.get('/{todo_id}')
-async def get_todo(todo_id:Annotated[int, Path(ge=1)], session:AsyncSession = Depends(db_helper.session_dependecy)):
-    todo = await crud.get_by_id(session=session, id=todo_id)
-    return todo
+async def get_todo(todo_dep:Todo = Depends(todo_by_id), session:AsyncSession = Depends(db_helper.session_dependecy)):
+    return todo_dep
 
 
 @router.get('/')

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class TodoBase(BaseModel):
     title:str
@@ -6,6 +6,7 @@ class TodoBase(BaseModel):
     status:str
     
 class Todo(TodoBase):
+    model_config = ConfigDict(from_attributes=True)
     id:int
     
 class TodoCreate(TodoBase):

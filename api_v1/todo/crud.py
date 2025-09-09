@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import TodoCreate
+from .schemas import TodoCreate, TodoUpdate
 from core.models import Todo
 from sqlalchemy import select,Result
 
@@ -22,3 +22,17 @@ async def get_by_id(session:AsyncSession, id:int)->Todo|None:
     result :Result = await session.execute(statement=stmt)
     todo = result.scalars().one()
     return todo
+
+
+async def update(session:AsyncSession, todo:Todo, todo_update:TodoUpdate):
+    for title , description,status in todo_update.model_dump(exclude_none=True).items():
+        setattr(todo, title, description, status)
+    
+    await session.commit()
+    return todo
+
+
+async def delete(session:AsyncSession, todo:Todo):
+    await session.delete(todo)
+    await session.commit()
+    

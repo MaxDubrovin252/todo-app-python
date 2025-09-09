@@ -21,3 +21,6 @@ class DBHelper:
         async with self.session_factory() as session:
             yield session
             await session.close()
+            
+            
+db_helper = DBHelper(url=settings.db.url, echo=settings.db.echo)

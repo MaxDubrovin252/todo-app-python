@@ -10,3 +10,9 @@ class Todo(TodoBase):
     
 class TodoCreate(TodoBase):
     pass
+
+
+class TodoUpdate(BaseModel):
+    title:str | None = None
+    description:str | None = None
+    status:str | None = None

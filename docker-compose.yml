@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  todo-db:
+    image: postgres
+    container_name: todo-app-db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5434:5432"
+    restart: always

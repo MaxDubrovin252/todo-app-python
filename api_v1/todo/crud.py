@@ -32,7 +32,7 @@ async def update(session:AsyncSession, todo_id:int, todo_update:TodoUpdate):
     
     if todo is None:
         return False
-    for name,value in todo_update.model_dump().items():
+    for name,value in todo_update.model_dump(exclude_none=True).items():
         setattr(todo, name, value)
     return todo
 

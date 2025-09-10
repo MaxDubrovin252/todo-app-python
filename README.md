@@ -22,7 +22,11 @@ A simple and intuitive Todo application built with FastAPI, featuring a RESTful 
 - [Docker](https://www.docker.com/) for containerization
 - [Pydantic](https://pydantic-docs.helpmanual.io/) for data validation
 
-## Installation
+## How to run
+- Set the .env file
+- Run docker compose
+- migrate up with alembic
+- run main.py
 
 ### Prerequisites
 

@@ -37,6 +37,7 @@ async def update_todo(todo_update:TodoUpdate,todo_id:Annotated[int,Path(ge=1)],s
     update_todo = await crud.update(session=session, todo_id=todo_id, todo_update=todo_update)
     if update_todo is None:
         raise HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")
+    return {"updated_todo":update_todo}
 
 
 @router.put('/{todo_id}')

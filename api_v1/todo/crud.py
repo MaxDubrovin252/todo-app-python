@@ -24,15 +24,30 @@ async def get_by_id(session:AsyncSession, id:int)->Todo|None:
     return todo
 
 
-async def update(session:AsyncSession, todo:Todo, todo_update:TodoUpdate):
-    for title , description,status in todo_update.model_dump(exclude_none=True).items():
-        setattr(todo, title, description, status)
+async def update(session:AsyncSession, todo_id:int, todo_update:TodoUpdate):
     
-    await session.commit()
+    stmt = select(Todo).where(Todo.id==todo_id)
+    res:Result = await session.execute(statement=stmt)
+    todo = res.scalars().first()
+    
+    if todo is None:
+        return False
+    for name,value in todo_update.model_dump().items():
+        setattr(todo, name, value)
     return todo
 
 
-async def delete(session:AsyncSession, todo:Todo):
-    await session.delete(todo)
-    await session.commit()
+async def delete(session:AsyncSession, todo_id:int)->bool:
+    
+        stmt = select(Todo).where(Todo.id== todo_id)
+        result:Result = await session.execute(statement=stmt)
+        todo = result.scalars().first()
+    
+        if todo is None:
+            return False
+        
+        await session.delete(todo)
+        await session.commit()
+
+        return  True
     

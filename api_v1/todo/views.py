@@ -19,18 +19,24 @@ async def create_todo(todo:TodoCreate, session:AsyncSession = Depends(db_helper.
     
 @router.get('/{todo_id}')
 async def get_todo(todo_id:Annotated [int,Path(ge=1)],session:AsyncSession = Depends(db_helper.session_dependecy)):
-    return await crud.get_by_id(session=session, id=todo_id)
+    todo = await crud.get_by_id(session=session, id=todo_id)
+    if todo is None:
+        raise HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")
+    return todo
 
 
 
 @router.get('/')
 async def get_todos(session:AsyncSession = Depends(db_helper.session_dependecy)):
-    return await crud.get_all(session=session)
+    todos = await crud.get_all(session=session)
+    return todos
 
 
 @router.patch('/{todo_id}')
 async def update_todo(todo_update:TodoUpdate,todo_id:Annotated[int,Path(ge=1)],session:AsyncSession = Depends(db_helper.session_dependecy)):
-    return await crud.update(session=session, todo_id=todo_id, todo_update=todo_update)
+    update_todo = await crud.update(session=session, todo_id=todo_id, todo_update=todo_update)
+    if update_todo is None:
+        raise HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")
 
 
 @router.put('/{todo_id}')

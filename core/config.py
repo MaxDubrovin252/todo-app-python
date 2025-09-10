@@ -1,10 +1,15 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+DB_URL = os.getenv("DB_URL")
 
 
 class DBSettings(BaseModel):
-    url:str = "postgresql+asyncpg://myuser:mypassword@localhost:5434/mydb"
+    url:str = DB_URL
     echo:bool = False
     
     

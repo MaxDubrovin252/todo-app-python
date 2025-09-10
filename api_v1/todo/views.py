@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Path, HTTPException
 from typing import Annotated
-from .schemas import TodoCreate, Todo, TodoUpdate
+from .schemas import TodoCreate, Todo, TodoUpdate, TodoUpdateAll
 from . import crud
 from core.models import db_helper
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dependencies import todo_by_id
+
 
 router = APIRouter(prefix='/todo', tags=['todo'])
 
@@ -33,10 +33,21 @@ async def update_todo(todo_update:TodoUpdate,todo_id:Annotated[int,Path(ge=1)],s
     return await crud.update(session=session, todo_id=todo_id, todo_update=todo_update)
 
 
+@router.put('/{todo_id}')
+async def update_todo_all(todo_id:Annotated[int,Path(ge=1)],todo_update:TodoUpdateAll, session:AsyncSession= Depends(db_helper.session_dependecy)):
+    new_todo = await crud.update_all(session=session, todo_update=todo_update, todo_id=todo_id)
+    if new_todo is None:
+        HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")
+    return {"updated_todo":new_todo}
+
 @router.delete('/{todo_id}')
 async def delete_todo(todo_id:Annotated[int, Path(ge=1)], session:AsyncSession = Depends(db_helper.session_dependecy)):
     status = await crud.delete(session=session, todo_id=todo_id)
     if status is False:
         return HTTPException(status_code=404, detail=f"todo with id {todo_id} not found")
     return {"status":"completed"}
+
+
+
+
     

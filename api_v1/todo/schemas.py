@@ -13,7 +13,10 @@ class TodoCreate(TodoBase):
     pass
 
 
-class TodoUpdate(BaseModel):
+class TodoUpdate(TodoBase):
     title:str | None = None
     description:str | None = None
     status:str | None = None
+    
+class TodoUpdateAll(TodoBase):
+    pass

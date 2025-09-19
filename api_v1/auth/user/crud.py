@@ -18,3 +18,16 @@ async def create_user(session:AsyncSession,username:str, password:bytes)->User|N
     session.add(new_user)
     await session.commit()
     return new_user
+
+
+
+async def get_user(session:AsyncSession, username:str)->User|None:
+    stmt = select(User).where(User.username==username)
+    res = await session.execute(statement=stmt)
+    user_exist = res.scalars().first()
+    
+    if user_exist is None:
+        await session.rollback()
+        return None
+    
+    return user_exist

@@ -6,7 +6,7 @@ from core import settings
 def create_access_token(username:str,user_id:int, exp_time=1):
     payload:dict = {
         "sub":username,
-        "exp": datetime.utcnow() + timedelta(hours=os.getenv("ACCESS_TOKEN_EXP")),
+        "exp": datetime.utcnow() + timedelta(hours=exp_time),
         "user_id":user_id,
         "iat":datetime.utcnow(),
     }

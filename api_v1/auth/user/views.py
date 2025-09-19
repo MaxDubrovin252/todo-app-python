@@ -28,3 +28,5 @@ async def sign_in(user:User,session:AsyncSession = Depends(db_helper.session_dep
         raise HTTPException(status_code=400, detail="password is invalid")
     
     
+@router.get("/protected")
+async def get_all()

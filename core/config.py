@@ -19,7 +19,7 @@ class DBSettings(BaseModel):
     
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
-    
+    jwt:JWTSettings = JWTSettings()
     
     
 settings = Settings()

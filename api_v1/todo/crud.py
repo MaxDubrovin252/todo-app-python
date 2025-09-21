@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 from .schemas import TodoCreate, TodoUpdate, TodoUpdateAll
 from core.models import Todo
 from sqlalchemy import select,Result
@@ -10,8 +11,9 @@ async def create(session:AsyncSession,title:str, description:str, user_id:int,st
     return new_todo
 
 
-async def get_all(session:AsyncSession)->list[Todo]:
-    stmt = select(Todo).order_by(Todo.id)
+async def get_all(session:AsyncSession, user_id:int)->list[Todo]:
+    
+    stmt = select(Todo).where(Todo.user_id==user_id)
     result :Result = await session.execute(statement=stmt)
     todos = result.scalars().all()
     return list(todos)

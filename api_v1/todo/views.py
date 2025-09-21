@@ -38,7 +38,7 @@ async def get_todos(token:str =Depends(user_verify_by_token),session:AsyncSessio
 
 
 @router.patch('/{todo_id}')
-async def update_todo(todo_update:TodoUpdate,todo_id:Annotated[int,Path(ge=1)],token:str =Depends(user_verify_by_token),session:AsyncSession = Depends(db_helper.session_dependecy)):
+async def update_todo(todo_update:TodoUpdate ,todo_id:Annotated[int,Path(ge=1)],token:str =Depends(user_verify_by_token),session:AsyncSession = Depends(db_helper.session_dependecy)):
     update_todo = await crud.update(session=session, todo_id=todo_id, todo_update=todo_update)
     if update_todo is None:
         raise HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")

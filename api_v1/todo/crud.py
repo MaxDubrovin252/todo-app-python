@@ -19,11 +19,15 @@ async def get_all(session:AsyncSession, user_id:int)->list[Todo]:
     return list(todos)
 
 
-async def get_by_id(session:AsyncSession, id:int)->Todo|None:
-    stmt = select(Todo).where(Todo.id==id)
+async def get_by_id(session:AsyncSession,todo_id:int)->Todo|None:
+    
+    
+    stmt = select(Todo).where(Todo.id==todo_id)
+
     result :Result = await session.execute(statement=stmt)
-    todo = result.scalars().one()
+    todo= result.scalars().first()
     return todo
+    
 
 
 async def update(session:AsyncSession, todo_id:int, todo_update:TodoUpdate):

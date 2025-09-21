@@ -21,11 +21,12 @@ async def create_todo(todo:TodoCreate, token:str =Depends(user_verify_by_token),
     
     
 @router.get('/{todo_id}')
-async def get_todo(todo_id:Annotated [int,Path(ge=1)],token:str =Depends(user_verify_by_token),session:AsyncSession = Depends(db_helper.session_dependecy)):
-    todo = await crud.get_by_id(session=session, id=todo_id,)
+async def get_todo(todo_id:Annotated[int, Path(ge=1)],token:str =Depends(user_verify_by_token),session:AsyncSession = Depends(db_helper.session_dependecy)):
+    username = token["sub"]
+    todo = await crud.get_by_id(session=session,todo_id=todo_id)
     if todo is None:
-        raise HTTPException(status_code=404, detail=f"cannot found todo with id {todo_id}")
-    return todo
+        raise HTTPException(status_code=404, detail=f"cannot found todo with id{todo_id}")
+    return {"title":todo.title,"username":username}
 
 
 

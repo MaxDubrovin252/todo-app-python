@@ -3,8 +3,8 @@ from .schemas import TodoCreate, TodoUpdate, TodoUpdateAll
 from core.models import Todo
 from sqlalchemy import select,Result
 
-async def create(session:AsyncSession,todo_in:TodoCreate)->Todo:
-    new_todo = Todo(**todo_in.model_dump())
+async def create(session:AsyncSession,title:str, description:str, user_id:int,status:str = "not-complete")->Todo:
+    new_todo = Todo(title=title, description=description,status=status,user_id=user_id)
     session.add(new_todo)
     await session.commit()
     return new_todo

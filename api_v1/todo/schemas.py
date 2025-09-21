@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 class TodoBase(BaseModel):
     title:str
     description:str 
-    status:str
+
     
 class Todo(TodoBase):
     model_config = ConfigDict(from_attributes=True)

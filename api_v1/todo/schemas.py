@@ -3,11 +3,11 @@ from pydantic import BaseModel, ConfigDict
 class TodoBase(BaseModel):
     title:str
     description:str 
-    status:str
+
     
 class Todo(TodoBase):
     model_config = ConfigDict(from_attributes=True)
-    id:int
+    status:str = "not-complete"
     
 class TodoCreate(TodoBase):
     pass
@@ -18,5 +18,5 @@ class TodoUpdate(TodoBase):
     description:str | None = None
     status:str | None = None
     
-class TodoUpdateAll(TodoBase):
+class TodoUpdateAll(TodoUpdate):
     pass

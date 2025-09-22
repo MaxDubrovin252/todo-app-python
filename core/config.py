@@ -7,6 +7,11 @@ load_dotenv()
 
 DB_URL = os.getenv("DB_URL")
 
+class JWTSettings(BaseModel):
+    secret_key:str= os.getenv("SECRET_KEY")
+    exp_time:int = os.getenv("ACCESS_TOKEN_EXP")
+    algo:str = os.getenv("ALGO")
+
 
 class DBSettings(BaseModel):
     url:str = DB_URL
@@ -15,7 +20,7 @@ class DBSettings(BaseModel):
     
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
-    
+    jwt:JWTSettings = JWTSettings()
     
     
 settings = Settings()

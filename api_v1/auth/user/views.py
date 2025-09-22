@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException , Form
 from .schemas import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models import db_helper
@@ -10,7 +10,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/sign_up")
-async def sign_up(user:User, session:AsyncSession = Depends(db_helper.session_dependecy)):
+async def sign_up(user:User= Form(), session:AsyncSession = Depends(db_helper.session_dependecy)):
     hash_pass = hash_password(password=user.password)
     new_user = await crud.create_user(session=session, username=user.username, password=hash_pass)
     if new_user is None:
@@ -19,7 +19,7 @@ async def sign_up(user:User, session:AsyncSession = Depends(db_helper.session_de
 
 
 @router.post("/sign_in")
-async def sign_in(user:User,session:AsyncSession = Depends(db_helper.session_dependecy)):
+async def sign_in(user:User=Form(),session:AsyncSession = Depends(db_helper.session_dependecy)):
     user_in = await crud.get_user(session=session, username=user.username)
     if user_in is None:
         raise HTTPException(status_code=404,detail="user not found")

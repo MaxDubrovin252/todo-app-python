@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Path, HTTPException
+from fastapi import APIRouter, Depends, Path, HTTPException,Form
 from typing import Annotated
 from .schemas import TodoCreate, Todo as todoSchema, TodoUpdate, TodoUpdateAll
 from . import crud
@@ -11,6 +11,12 @@ from api_v1.auth.user.dependencies import user_verify_by_token
 router = APIRouter(prefix='/todo', tags=['todo'])
 
 
+@router.post("/set-complete/{todo_id}")
+async def set_comp(todo_id:Annotated[int,Path(ge=1)],complete:bool= Form(), token:str=Depends(user_verify_by_token), session:AsyncSession = Depends(db_helper.session_dependecy)):
+    status = await crud.set_complete(session=session,todo_id=todo_id, complete=complete)
+    if status is False:
+        raise HTTPException(status_code=404, detail=f"todo with id {todo_id} not found")
+    return {"complete":status}
 
 @router.post('/')
 async def create_todo(todo:TodoCreate, token:str =Depends(user_verify_by_token),session:AsyncSession = Depends(db_helper.session_dependecy)):
@@ -70,4 +76,4 @@ async def delete_todo(todo_id:Annotated[int, Path(ge=1)], token:str=Depends(user
 
 
 
-    
+

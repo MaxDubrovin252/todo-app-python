@@ -73,4 +73,19 @@ async def delete(session:AsyncSession, todo_id:int)->bool:
         await session.commit()
 
         return True
+
+
+
+async def set_complete(session:AsyncSession, todo_id:int,complete:bool)->bool|None:
+    stmt = select(Todo).where(Todo.id==todo_id)
+    todo = await session.scalar(stmt)
+    
+    if todo is None:
+        return False
+    
+    if complete is True:
+        todo.status == "complete"
+        return True
+    
+    return None
     

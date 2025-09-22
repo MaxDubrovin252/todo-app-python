@@ -5,8 +5,8 @@ from api_v1.auth.user import router as auth_router
 app = FastAPI()
 
 
-app.include_router(router=todo_router)
 app.include_router(router=auth_router)
+app.include_router(router=todo_router)
 
 
 
